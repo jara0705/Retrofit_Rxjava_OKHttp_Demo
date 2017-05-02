@@ -10,13 +10,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.jara.retrofit_rxjava_okhttp_demo.okhttp.ICallBack;
 import com.jara.retrofit_rxjava_okhttp_demo.okhttp.OkHttpDemoUtil;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * 验证封装的OkHttp3，实现下载图片并展示
@@ -52,10 +55,14 @@ public class OkHttpActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Response response) {
                         Log.i("MainActivity","okhttp连接成功");
-                        InputStream is = response.body().byteStream();
+                        ResponseBody responseBody = response.body();
+                        InputStream is = responseBody.byteStream();
                         Bitmap bitmap = BitmapFactory.decodeStream(is);
-                        imageView.setImageBitmap(bitmap);
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                        Glide.with(OkHttpActivity.this).load(baos.toByteArray()).into(imageView);
                         try {
+                            responseBody.close();
                             is.close();
                         } catch (IOException e) {
                             e.printStackTrace();

@@ -20,16 +20,12 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ImageView imageView;
     private Button button;
 
-    private static final String IMAGE_URL =
-            "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1493702692204&di=369d437aa1f4cf303ccc7c9c6a25ef03&imgtype=0&src=http%3A%2F%2Fimg4.duitang.com%2Fuploads%2Fitem%2F201602%2F10%2F20160210215552_eUz32.thumb.700_0.jpeg";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        imageView = (ImageView) findViewById(R.id.image_get);
         button = (Button) findViewById(R.id.button);
 
         button.setOnClickListener(new View.OnClickListener() {
