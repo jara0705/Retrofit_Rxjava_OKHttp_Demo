@@ -18,6 +18,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
+ *
  * Created by jara on 2017-4-26.
  */
 
@@ -44,6 +45,7 @@ public class OkHttpDemoUtil {
     }
 
     private OkHttpDemoUtil() {
+        mHandler = new Handler();
         okBuild = new OkHttpClient.Builder();
         okBuild.connectTimeout(60, TimeUnit.SECONDS);
         okBuild.readTimeout(60, TimeUnit.SECONDS);
@@ -78,6 +80,7 @@ public class OkHttpDemoUtil {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(final Call call, final IOException e) {
+                Log.i("OkHttpDemoUtil","okhttp连接失败");
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -90,6 +93,7 @@ public class OkHttpDemoUtil {
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
+                Log.i("OkHttpDemoUtil","okhttp连接成功");
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
