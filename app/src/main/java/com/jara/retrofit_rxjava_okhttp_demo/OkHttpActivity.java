@@ -59,7 +59,7 @@ public class OkHttpActivity extends AppCompatActivity {
                         InputStream is = responseBody.byteStream();
                         Bitmap bitmap = BitmapFactory.decodeStream(is);
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                        bitmap.compress(Bitmap.CompressFormat.WEBP, 100, baos);
                         Glide.with(OkHttpActivity.this).load(baos.toByteArray()).into(imageView);
                         try {
                             responseBody.close();

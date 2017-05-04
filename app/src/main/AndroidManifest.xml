@@ -18,9 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity android:name=".OkHttpActivity">
-
+        </activity>
+        <activity android:name=".RxJava2Activity">
         </activity>
     </application>
 

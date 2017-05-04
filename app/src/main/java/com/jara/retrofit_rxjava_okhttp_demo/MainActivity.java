@@ -21,18 +21,29 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
 
     private Button button;
+    private Button button1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         button = (Button) findViewById(R.id.button);
+        button1 = (Button) findViewById(R.id.button1);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, OkHttpActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, RxJava2Activity.class);
                 startActivity(intent);
             }
         });

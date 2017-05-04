@@ -12,13 +12,14 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
- *
  * Created by jara on 2017-4-26.
  */
 
@@ -56,31 +57,66 @@ public class OkHttpDemoUtil {
      * 异步Get请求
      */
     public void getAsynHttp(String url, ICallBack iCallBack) {
+        Log.i("OkHttpDemoUtil", "getAsynHttp---->" + url);
         Request.Builder builder = new Request.Builder().url(url);
         builder.method("GET", null);
         Request request = builder.build();
         Call call = getOkHttpClient().newCall(request);
         result(call, iCallBack);
-//        call.enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                String responseBody = response.body().toString();
-//                Log.i(TAG, "当前线程名---->" + Thread.currentThread().getName());
-//
-//            }
-//        });
+    }
+
+    public void getAsynHttpByRxJava(String url, ICallBack iCallBack) {
+        Log.i("OkHttpDemoUtil", "getAsynHttp---->" + url);
+        Request.Builder builder = new Request.Builder().url(url);
+        builder.method("GET", null);
+        Request request = builder.build();
+        Call call = getOkHttpClient().newCall(request);
+        result1(call, iCallBack);
+    }
+
+    /**
+     * 异步Post请求
+     */
+    public void postAsynHttp(String url, ICallBack iCallBack) {
+        RequestBody body = new FormBody.Builder()
+                .add("size", "10")
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        Call call = getOkHttpClient().newCall(request);
+        result(call, iCallBack);
+    }
+
+    private void result1(Call call, final ICallBack iCallBack) {
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(final Call call, final IOException e) {
+                Log.i("OkHttpDemoUtil", "okhttp连接失败");
+
+                if (iCallBack != null) {
+                    iCallBack.onError(e);
+                }
+
+            }
+
+            @Override
+            public void onResponse(Call call, final Response response) throws IOException {
+                Log.i("OkHttpDemoUtil", "okhttp连接成功");
+                if (iCallBack != null) {
+                    iCallBack.onResponse(response);
+                }
+
+            }
+        });
     }
 
     private void result(Call call, final ICallBack iCallBack) {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(final Call call, final IOException e) {
-                Log.i("OkHttpDemoUtil","okhttp连接失败");
+                Log.i("OkHttpDemoUtil", "okhttp连接失败");
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -93,7 +129,7 @@ public class OkHttpDemoUtil {
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
-                Log.i("OkHttpDemoUtil","okhttp连接成功");
+                Log.i("OkHttpDemoUtil", "okhttp连接成功");
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
