@@ -1,6 +1,5 @@
 package com.jara.retrofit_rxjava_okhttp_demo.bean;
 
-import com.google.gson.annotations.SerializedName;
 
 /**
  *
@@ -9,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class IpModel {
 
-    private int code; // FIXME check this code
+    private int code;
     private IpData data;
 
     public int get_Code() {

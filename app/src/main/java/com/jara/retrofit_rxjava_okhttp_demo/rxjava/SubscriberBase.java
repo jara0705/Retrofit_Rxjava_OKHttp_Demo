@@ -12,7 +12,9 @@ import okhttp3.Response;
  * Created by jara on 2017-5-3.
  */
 
-public class SubscriberBase<T> implements Subscriber<T>, ICallBack {
+public abstract class SubscriberBase<T> implements Subscriber<T> {
+
+    public T result;
     @Override
     public void onSubscribe(Subscription s) {
         s.request(Long.MAX_VALUE);
@@ -20,12 +22,13 @@ public class SubscriberBase<T> implements Subscriber<T>, ICallBack {
 
     @Override
     public void onNext(T t) {
-
+        result = t;
+        onResponse(result);
     }
 
     @Override
     public void onError(Throwable t) {
-        t.printStackTrace();
+        onError((Exception) t);
     }
 
     @Override
@@ -33,13 +36,8 @@ public class SubscriberBase<T> implements Subscriber<T>, ICallBack {
 
     }
 
-    @Override
-    public void onError(Exception e) {
+    public abstract void onResponse(T t);
+    public abstract void onError(Exception e);
 
-    }
 
-    @Override
-    public void onResponse(Response response) {
-
-    }
 }

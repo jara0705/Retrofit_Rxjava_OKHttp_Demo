@@ -4,12 +4,24 @@ import com.google.gson.Gson;
 
 import android.util.Log;
 
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.jara.retrofit_rxjava_okhttp_demo.bean.IpModel;
 import com.jara.retrofit_rxjava_okhttp_demo.okhttp.OKHttpClientFactory;
 import com.jara.retrofit_rxjava_okhttp_demo.okhttp.OkHttpDemoUtil;
+import com.jara.retrofit_rxjava_okhttp_demo.rxjava.SubscriberBase;
+
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import java.io.IOException;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -34,29 +46,33 @@ public class RetrofitDemo {
             .client(OKHttpClientFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(new Gson()))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build();
 
     private static GitHubApi gitHubApi = retrofit.create(GitHubApi.class);
 
     interface GitHubApi{
         @GET("getIpInfo.php")
-        Call<IpModel> getIpMsg(@Query("ip") String ip);
+        Flowable<IpModel> getIpMsg(@Query("ip") String ip);
 
     }
 
     public static void getIp(String ip) {
-        gitHubApi.getIpMsg(ip).enqueue(new Callback<IpModel>() {
-            @Override
-            public void onResponse(Call<IpModel> call, Response<IpModel> response) {
-                String country = response.body().getData().getCountry();
-                Log.i("Retrofit2", "country---->" + country);
-            }
+        gitHubApi.getIpMsg(ip).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SubscriberBase<IpModel>() {
 
-            @Override
-            public void onFailure(Call<IpModel> call, Throwable t) {
-                Log.i("Retrofit2", "country---->get failed");
-            }
-        });
+                    @Override
+                    public void onResponse(IpModel ipModel) {
+                        Log.i("Retrofit2","country---->" + ipModel.getData().getCountry());
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        e.printStackTrace();
+                        Log.i("Retrofit2", "country--->failed");
+                    }
+                });
     }
 
 }
