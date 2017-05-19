@@ -5,9 +5,12 @@ import com.google.gson.Gson;
 import android.util.Log;
 
 import com.jara.retrofit_rxjava_okhttp_demo.bean.IpModel;
+import com.jara.retrofit_rxjava_okhttp_demo.okhttp.OKHttpClientFactory;
+import com.jara.retrofit_rxjava_okhttp_demo.okhttp.OkHttpDemoUtil;
 
 import java.io.IOException;
 
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,13 +29,14 @@ import retrofit2.http.Query;
 
 public class RetrofitDemo {
 
-    static Retrofit retrofit = new Retrofit.Builder()
+    private static Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("http://ip.taobao.com/service/")
+            .client(OKHttpClientFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(new Gson()))
             .build();
 
-    static GitHubApi gitHubApi = retrofit.create(GitHubApi.class);
+    private static GitHubApi gitHubApi = retrofit.create(GitHubApi.class);
 
     interface GitHubApi{
         @GET("getIpInfo.php")
