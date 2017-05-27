@@ -27,12 +27,10 @@ public class OkHttpDemoUtil {
 
     private volatile static OkHttpDemoUtil mInstance;
 
-    public static OkHttpClient okHttpClient;
     private OkHttpClient.Builder okBuild;
     private Handler mHandler;
 
     private static final String TAG = "OkHttpDemoUtil";
-    private static final String GET_UTL = "http://www.baidu.com";
 
     public static OkHttpDemoUtil getmInstance() {
         if (mInstance == null) {
@@ -57,7 +55,7 @@ public class OkHttpDemoUtil {
      * 异步Get请求
      */
     public void getAsynHttp(String url, ICallBack iCallBack) {
-        Log.i("OkHttpDemoUtil", "getAsynHttp---->" + url);
+        Log.i(TAG, "getAsynHttp---->" + url);
         Request.Builder builder = new Request.Builder().url(url);
         builder.method("GET", null);
         Request request = builder.build();
@@ -66,7 +64,7 @@ public class OkHttpDemoUtil {
     }
 
     public void getAsynHttpByRxJava(String url, ICallBack iCallBack) {
-        Log.i("OkHttpDemoUtil", "getAsynHttp---->" + url);
+        Log.i(TAG, "getAsynHttp---->" + url);
         Request.Builder builder = new Request.Builder().url(url);
         builder.method("GET", null);
         Request request = builder.build();
@@ -93,7 +91,7 @@ public class OkHttpDemoUtil {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(final Call call, final IOException e) {
-                Log.i("OkHttpDemoUtil", "okhttp连接失败");
+                Log.i(TAG, "okhttp连接失败");
 
                 if (iCallBack != null) {
                     iCallBack.onError(e);
@@ -103,7 +101,7 @@ public class OkHttpDemoUtil {
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
-                Log.i("OkHttpDemoUtil", "okhttp连接成功");
+                Log.i(TAG, "okhttp连接成功");
                 if (iCallBack != null) {
                     iCallBack.onResponse(response);
                 }
@@ -116,7 +114,7 @@ public class OkHttpDemoUtil {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(final Call call, final IOException e) {
-                Log.i("OkHttpDemoUtil", "okhttp连接失败");
+                Log.i(TAG, "okhttp连接失败");
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -129,7 +127,7 @@ public class OkHttpDemoUtil {
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
-                Log.i("OkHttpDemoUtil", "okhttp连接成功");
+                Log.i(TAG, "okhttp连接成功");
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {

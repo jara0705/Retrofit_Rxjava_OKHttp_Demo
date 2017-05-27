@@ -7,31 +7,16 @@ import android.util.Log;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.jara.retrofit_rxjava_okhttp_demo.bean.IpModel;
 import com.jara.retrofit_rxjava_okhttp_demo.okhttp.OKHttpClientFactory;
-import com.jara.retrofit_rxjava_okhttp_demo.okhttp.OkHttpDemoUtil;
 import com.jara.retrofit_rxjava_okhttp_demo.rxjava.SubscriberBase;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
-import java.io.IOException;
 
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.OkHttpClient;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -40,6 +25,8 @@ import retrofit2.http.Query;
  */
 
 public class RetrofitDemo {
+
+    private static final String TAG = "RetrofitDemo";
 
     private static Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("http://ip.taobao.com/service/")
@@ -58,19 +45,20 @@ public class RetrofitDemo {
     }
 
     public static void getIp(String ip) {
-        gitHubApi.getIpMsg(ip).subscribeOn(Schedulers.io())
+        gitHubApi.getIpMsg(ip)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SubscriberBase<IpModel>() {
 
                     @Override
                     public void onResponse(IpModel ipModel) {
-                        Log.i("Retrofit2","country---->" + ipModel.getData().getCountry());
+                        Log.i(TAG,"country---->" + ipModel.getData().getCountry());
                     }
 
                     @Override
                     public void onError(Exception e) {
                         e.printStackTrace();
-                        Log.i("Retrofit2", "country--->failed");
+                        Log.i(TAG, "country--->failed");
                     }
                 });
     }
