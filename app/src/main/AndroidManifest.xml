@@ -28,6 +28,8 @@
         </activity>
         <activity android:name=".RetrofitActivity">
         </activity>
+        <activity android:name=".SplashActivity">
+        </activity>
     </application>
 
 </manifest>

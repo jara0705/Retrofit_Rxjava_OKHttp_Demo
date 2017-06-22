@@ -26,10 +26,10 @@
             android:layout_height="wrap_content"
             android:text="Retrofit2"
             android:textAllCaps="false"/>
-    <!--<Button-->
-    <!--android:id="@+id/button3"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="获取图片"/>-->
+    <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="获取图片"/>
 
 </LinearLayout>

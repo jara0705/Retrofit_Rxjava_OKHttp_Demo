@@ -5,7 +5,9 @@ import com.google.gson.Gson;
 import android.util.Log;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import com.jara.retrofit_rxjava_okhttp_demo.bean.Common;
 import com.jara.retrofit_rxjava_okhttp_demo.bean.IpModel;
+import com.jara.retrofit_rxjava_okhttp_demo.http.GitHubApi;
 import com.jara.retrofit_rxjava_okhttp_demo.okhttp.OKHttpClientFactory;
 import com.jara.retrofit_rxjava_okhttp_demo.rxjava.SubscriberBase;
 
@@ -29,7 +31,7 @@ public class RetrofitDemo {
     private static final String TAG = "RetrofitDemo";
 
     private static Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://ip.taobao.com/service/")
+            .baseUrl("http://")
             .client(OKHttpClientFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(new Gson()))
@@ -38,11 +40,6 @@ public class RetrofitDemo {
 
     private static GitHubApi gitHubApi = retrofit.create(GitHubApi.class);
 
-    interface GitHubApi{
-        @GET("getIpInfo.php")
-        Flowable<IpModel> getIpMsg(@Query("ip") String ip);
-
-    }
 
     public static void getIp(String ip) {
         gitHubApi.getIpMsg(ip)
@@ -59,6 +56,23 @@ public class RetrofitDemo {
                     public void onError(Exception e) {
                         e.printStackTrace();
                         Log.i(TAG, "country--->failed");
+                    }
+                });
+    }
+
+    public static void getSplashImage(int type) {
+        gitHubApi.getSplashImage(type)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SubscriberBase<Common>() {
+                    @Override
+                    public void onResponse(Common common) {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
                     }
                 });
     }
