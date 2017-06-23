@@ -22,34 +22,53 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 /**
- *
  * Created by jara on 2017-5-9.
  */
 
 public class RetrofitDemo {
 
     private static final String TAG = "RetrofitDemo";
+    private static RetrofitDemo instance;
+    private static GitHubApi service;
 
-    private static Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://")
-            .client(OKHttpClientFactory.create())
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create(new Gson()))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build();
+    private RetrofitDemo() {
+        initService();
+    }
 
-    private static GitHubApi gitHubApi = retrofit.create(GitHubApi.class);
+    public static synchronized RetrofitDemo getInstance() {
+        if (instance == null) {
+            instance = new RetrofitDemo();
+        }
+        return instance;
+    }
 
+    public static GitHubApi getService() {
+        if (service == null) {
+            initService();
+        }
+        return service;
+    }
+
+    private static void initService() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://")
+                .client(OKHttpClientFactory.create())
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(new Gson()))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build();
+        service = retrofit.create(GitHubApi.class);
+    }
 
     public static void getIp(String ip) {
-        gitHubApi.getIpMsg(ip)
+        getService().getIpMsg(ip)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SubscriberBase<IpModel>() {
 
                     @Override
                     public void onResponse(IpModel ipModel) {
-                        Log.i(TAG,"country---->" + ipModel.getData().getCountry());
+                        Log.i(TAG, "country---->" + ipModel.getData().getCountry());
                     }
 
                     @Override
@@ -61,7 +80,7 @@ public class RetrofitDemo {
     }
 
     public static void getSplashImage(int type) {
-        gitHubApi.getSplashImage(type)
+        getService().getSplashImage(type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new SubscriberBase<Common>() {
