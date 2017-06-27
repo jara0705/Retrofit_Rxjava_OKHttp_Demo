@@ -39,7 +39,7 @@ public class Common {
                 '}';
     }
 
-    class Attachment{
+    public class Attachment{
         public Splash flashScreen;
     }
 }

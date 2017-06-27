@@ -13,9 +13,9 @@ import retrofit2.http.Query;
  */
 
 public interface GitHubApi {
-    @GET("ip.taobao.com/service/getIpInfo.php")
+    @GET("service/getIpInfo.php")
     Flowable<IpModel> getIpMsg(@Query("ip") String ip);
 
-    @GET("beta.goldenalpha.com.cn/fundworks/media/getFlashScreen")
+    @GET("http://beta.goldenalpha.com.cn/fundworks/media/getFlashScreen")
     Flowable<Common> getSplashImage(@Query("type") int type);
 }

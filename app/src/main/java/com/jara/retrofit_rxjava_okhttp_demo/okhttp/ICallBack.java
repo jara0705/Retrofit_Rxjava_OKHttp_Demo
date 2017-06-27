@@ -1,5 +1,8 @@
 package com.jara.retrofit_rxjava_okhttp_demo.okhttp;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -9,5 +12,5 @@ import okhttp3.Response;
 
 public interface ICallBack<T> {
     void onError(Exception e);
-    void onResponse(Response response);
+    void onResponse(Response response) throws IOException;
 }

@@ -5,6 +5,8 @@ import com.jara.retrofit_rxjava_okhttp_demo.okhttp.ICallBack;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
+import java.io.IOException;
+
 import okhttp3.Response;
 
 /**
@@ -23,7 +25,11 @@ public abstract class SubscriberBase<T> implements Subscriber<T> {
     @Override
     public void onNext(T t) {
         result = t;
-        onResponse(result);
+        try {
+            onResponse(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -36,7 +42,7 @@ public abstract class SubscriberBase<T> implements Subscriber<T> {
 
     }
 
-    public abstract void onResponse(T t);
+    public abstract void onResponse(T t) throws IOException;
     public abstract void onError(Exception e);
 
 

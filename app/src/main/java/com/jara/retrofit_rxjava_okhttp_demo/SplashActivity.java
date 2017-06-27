@@ -7,6 +7,7 @@ import android.provider.SyncStateContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.jara.retrofit_rxjava_okhttp_demo.bean.Constants;
 import com.jara.retrofit_rxjava_okhttp_demo.bean.Splash;
+import com.jara.retrofit_rxjava_okhttp_demo.service.SplashDownLoadService;
 import com.jara.retrofit_rxjava_okhttp_demo.util.SerializableUtils;
 
 import java.io.File;
@@ -22,6 +24,7 @@ import java.io.Serializable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -35,6 +38,12 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
+        showAndDownSplash();
+    }
+
+    @OnClick(R.id.sp_jump_btn)
+    void onClick() {
+        gotoMainActivity();
     }
 
     private CountDownTimer countDownTimer = new CountDownTimer(3400, 1000) {
@@ -48,11 +57,13 @@ public class SplashActivity extends AppCompatActivity {
         @Override
         public void onFinish() {
             spJumpBtn.setText("跳过(0s)");
+            gotoMainActivity();
         }
     };
 
     private void showAndDownSplash() {
         showSplash();
+        startImageDownload();
     }
 
     private void showSplash() {
@@ -60,19 +71,22 @@ public class SplashActivity extends AppCompatActivity {
         if (splash != null && !TextUtils.isEmpty(splash.savePath)) {
             Glide.with(this).load(splash.savePath).dontAnimate().into(spBgImage);
             startClock();
+            Log.i("SplashActivity","start clock");
         } else {
-            spJumpBtn.setVisibility(View.INVISIBLE);
-            spJumpBtn.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    gotoMainActivity();
-                }
-            }, 500);
+//            spJumpBtn.setVisibility(View.INVISIBLE);
+            Log.i("SplashActivity","no start clock");
+//            spJumpBtn.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    gotoMainActivity();
+//                }
+//            }, 500);
+            startClock();
         }
     }
 
     private void startImageDownload() {
-
+        SplashDownLoadService.startDownLoadSplashImage(this, Constants.DOWNLOAD_SPLASH);
     }
 
     private Splash getLocalSplash() {
@@ -96,6 +110,7 @@ public class SplashActivity extends AppCompatActivity {
         countDownTimer.cancel();
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override

@@ -51,7 +51,7 @@ public class RetrofitDemo {
 
     private static void initService() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://")
+                .baseUrl("http://ip.taobao.com/")
                 .client(OKHttpClientFactory.create())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(new Gson()))

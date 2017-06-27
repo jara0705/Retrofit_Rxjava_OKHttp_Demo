@@ -132,7 +132,11 @@ public class OkHttpDemoUtil {
                     @Override
                     public void run() {
                         if (iCallBack != null) {
-                            iCallBack.onResponse(response);
+                            try {
+                                iCallBack.onResponse(response);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 });
